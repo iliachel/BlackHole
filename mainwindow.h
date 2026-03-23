@@ -9,6 +9,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class GLWidget;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -18,6 +20,7 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui = nullptr;
+    GLWidget* m_glWidget = nullptr;
 };
 #endif // MAINWINDOW_H

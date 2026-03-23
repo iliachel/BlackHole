@@ -6,7 +6,8 @@ D:/Projects/BlackHole/build/Desktop_Qt_6_10_1_MinGW_64_bit-Debug/BlackHole_autog
   C:/Qt/6.10.1/mingw_64/include/QtCore/QRect \
   C:/Qt/6.10.1/mingw_64/include/QtCore/QSize \
   C:/Qt/6.10.1/mingw_64/include/QtCore/QSizeF \
-  C:/Qt/6.10.1/mingw_64/include/QtCore/QTimer \
+  C:/Qt/6.10.1/mingw_64/include/QtCore/QString \
+  C:/Qt/6.10.1/mingw_64/include/QtCore/QtMath \
   C:/Qt/6.10.1/mingw_64/include/QtCore/q17memory.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/q20iterator.h \
@@ -129,7 +130,6 @@ D:/Projects/BlackHole/build/Desktop_Qt_6_10_1_MinGW_64_bit-Debug/BlackHole_autog
   C:/Qt/6.10.1/mingw_64/include/QtCore/qtenvironmentvariables.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/qtextstream.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/qtformat_impl.h \
-  C:/Qt/6.10.1/mingw_64/include/QtCore/qtimer.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/qtmetamacros.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/qtnoop.h \
   C:/Qt/6.10.1/mingw_64/include/QtCore/qtpreprocessorsupport.h \
@@ -152,6 +152,7 @@ D:/Projects/BlackHole/build/Desktop_Qt_6_10_1_MinGW_64_bit-Debug/BlackHole_autog
   C:/Qt/6.10.1/mingw_64/include/QtGui/QMouseEvent \
   C:/Qt/6.10.1/mingw_64/include/QtGui/QSurfaceFormat \
   C:/Qt/6.10.1/mingw_64/include/QtGui/QTransform \
+  C:/Qt/6.10.1/mingw_64/include/QtGui/QVector2D \
   C:/Qt/6.10.1/mingw_64/include/QtGui/QVector3D \
   C:/Qt/6.10.1/mingw_64/include/QtGui/qaction.h \
   C:/Qt/6.10.1/mingw_64/include/QtGui/qbitmap.h \
@@ -433,4 +434,6 @@ D:/Projects/BlackHole/build/Desktop_Qt_6_10_1_MinGW_64_bit-Debug/BlackHole_autog
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-  D:/Projects/BlackHole/camera.h
+  D:/Projects/BlackHole/camera.h \
+  D:/Projects/BlackHole/physics/geodesicintegrator.h \
+  D:/Projects/BlackHole/physics/kerrspacetime.h

@@ -343,7 +343,8 @@
 		"C:/Qt/6.10.1/mingw_64/lib/cmake/Qt6/QtPublicWindowsHelpers.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"C:/Qt/6.10.1/mingw_64/lib/cmake/Qt6/Qt6Dependencies.cmake",
-		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/GNUInstallDirs.cmake"
+		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/GNUInstallDirs.cmake",
+		"D:/Projects/BlackHole/resources.qrc"
 	],
 	"CMAKE_SOURCE_DIR" : "D:/Projects/BlackHole",
 	"CROSS_CONFIG" : false,
@@ -367,6 +368,18 @@
 			"D:/Projects/BlackHole/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
+			null
+		],
+		[
+			"D:/Projects/BlackHole/physics/geodesicintegrator.h",
+			"MU",
+			"R523WIGGQZ/moc_geodesicintegrator.cpp",
+			null
+		],
+		[
+			"D:/Projects/BlackHole/physics/kerrspacetime.h",
+			"MU",
+			"R523WIGGQZ/moc_kerrspacetime.cpp",
 			null
 		]
 	],
@@ -448,7 +461,9 @@
 		[ "D:/Projects/BlackHole/camera.cpp", "MU", null ],
 		[ "D:/Projects/BlackHole/glwidget.cpp", "MU", null ],
 		[ "D:/Projects/BlackHole/main.cpp", "MU", null ],
-		[ "D:/Projects/BlackHole/mainwindow.cpp", "MU", null ]
+		[ "D:/Projects/BlackHole/mainwindow.cpp", "MU", null ],
+		[ "D:/Projects/BlackHole/physics/geodesicintegrator.cpp", "MU", null ],
+		[ "D:/Projects/BlackHole/physics/kerrspacetime.cpp", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],

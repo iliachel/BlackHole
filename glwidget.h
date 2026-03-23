@@ -1,44 +1,69 @@
 #pragma once
-#include <QOpenGLWidget>
+
+#include <QElapsedTimer>
+#include <QKeyEvent>
+#include <QMouseEvent>
 #include <QOpenGLFunctions_4_3_Core>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLWidget>
+#include <QString>
 #include <QVector3D>
-#include <QElapsedTimer>
-#include "camera.h"
+#include <QVector2D>
 
-// Структура должна быть выровнена для GLSL (std430 layout)
-struct ParticleData {
-    // x, y, z - координаты, w - не используется (padding) или масса
-    float pos[4];
-    // vx, vy, vz - компоненты 4-скорости, w - не используется
-    float vel[4];
-};
+#include "camera.h"
+#include "physics/geodesicintegrator.h"
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions_4_3_Core
 {
     Q_OBJECT
+
 public:
     explicit GLWidget(QWidget* parent = nullptr);
     ~GLWidget();
-    // ... (код камеры и событий мыши остается тем же) ...
+
+    Camera camera;
+    QElapsedTimer frameTimer;
+    bool firstMouse = true;
+    QPoint lastMousePos;
+    bool keyW = false;
+    bool keyA = false;
+    bool keyS = false;
+    bool keyD = false;
+    bool keyQ = false;
+    bool keyE = false;
+    bool keyShift = false;
+    bool mouseLookActive = false;
 
 protected:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int w, int h) override;
+    void keyPressEvent(QKeyEvent* e) override;
+    void keyReleaseEvent(QKeyEvent* e) override;
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
 
 private:
-    void initParticles();
+    void updatePhysicsDiagnostics();
+    void updateCamera(float dt);
+    void syncCameraFromOrbit();
 
-    QOpenGLShaderProgram renderShader;  // Шейдер для рисовки
-    QOpenGLShaderProgram computeShader; // Шейдер для физики
+    QOpenGLShaderProgram photonShader;
+    QOpenGLShaderProgram gridShader;
 
-    GLuint particleBuffer = 0; // SSBO ID
-    GLuint vao = 0;
+    GLuint quadVao = 0;
+    GLuint quadVbo = 0;
+    GLuint gridVao = 0;
+    GLuint gridVbo = 0;
 
-    int particleCount = 1000000; // Теперь мы можем потянуть МИЛЛИОН частиц
+    int gridIndexCount = 0;
 
-    // Параметры симуляции
-    float blackHoleMass = 1.0f;
-    float blackHoleSpin = 0.9f; // a parameter (0..1)
+    physics::KerrSpacetime spacetime {2.0, 0.9};
+    physics::GeodesicIntegrator geodesicIntegrator {spacetime};
+    QString physicsSummary;
+
+    float orbitDistance = 20.0f;
+    float orbitAzimuth = -90.0f;
+    float orbitElevation = 0.0f;
 };

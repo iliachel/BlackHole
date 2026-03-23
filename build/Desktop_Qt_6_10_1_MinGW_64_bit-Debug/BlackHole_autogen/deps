@@ -5,7 +5,8 @@ BlackHole_autogen/timestamp: \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/QRect \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/QSize \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/QSizeF \
-	C:/Qt/6.10.1/mingw_64/include/QtCore/QTimer \
+	C:/Qt/6.10.1/mingw_64/include/QtCore/QString \
+	C:/Qt/6.10.1/mingw_64/include/QtCore/QtMath \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/q17memory.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/q20functional.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/q20iterator.h \
@@ -128,7 +129,6 @@ BlackHole_autogen/timestamp: \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/qtenvironmentvariables.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/qtextstream.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/qtformat_impl.h \
-	C:/Qt/6.10.1/mingw_64/include/QtCore/qtimer.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/qtmetamacros.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/qtnoop.h \
 	C:/Qt/6.10.1/mingw_64/include/QtCore/qtpreprocessorsupport.h \
@@ -151,6 +151,7 @@ BlackHole_autogen/timestamp: \
 	C:/Qt/6.10.1/mingw_64/include/QtGui/QMouseEvent \
 	C:/Qt/6.10.1/mingw_64/include/QtGui/QSurfaceFormat \
 	C:/Qt/6.10.1/mingw_64/include/QtGui/QTransform \
+	C:/Qt/6.10.1/mingw_64/include/QtGui/QVector2D \
 	C:/Qt/6.10.1/mingw_64/include/QtGui/QVector3D \
 	C:/Qt/6.10.1/mingw_64/include/QtGui/qaction.h \
 	C:/Qt/6.10.1/mingw_64/include/QtGui/qbitmap.h \
@@ -643,4 +644,9 @@ BlackHole_autogen/timestamp: \
 	D:/Projects/BlackHole/main.cpp \
 	D:/Projects/BlackHole/mainwindow.cpp \
 	D:/Projects/BlackHole/mainwindow.h \
+	D:/Projects/BlackHole/physics/geodesicintegrator.cpp \
+	D:/Projects/BlackHole/physics/geodesicintegrator.h \
+	D:/Projects/BlackHole/physics/kerrspacetime.cpp \
+	D:/Projects/BlackHole/physics/kerrspacetime.h \
+	D:/Projects/BlackHole/resources.qrc \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

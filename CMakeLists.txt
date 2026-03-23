@@ -18,14 +18,21 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        glwidget.cpp
+        glwidget.h
+        camera.cpp
+        camera.h
+        physics/kerrspacetime.cpp
+        physics/kerrspacetime.h
+        physics/geodesicintegrator.cpp
+        physics/geodesicintegrator.h
+        resources.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(BlackHole
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        glwidget.h glwidget.cpp
-        camera.h camera.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET BlackHole APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

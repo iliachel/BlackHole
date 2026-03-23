@@ -1,0 +1,160 @@
+#version 430 core
+
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+
+struct Particle {
+    vec4 pos; 
+    vec4 vel; 
+};
+
+layout(std430, binding = 0) buffer ParticleBuffer {
+    Particle particles[];
+};
+
+uniform float dt; 
+uniform float M;  
+uniform float a;  
+
+float pcg_hash(uint seed) {
+    uint state = seed * 747796405u + 2891336453u;
+    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    return float((word >> 22u) ^ word) / 4294967295.0;
+}
+
+vec3 getAcceleration(vec3 pos, vec3 vel) {
+    float r2 = dot(pos, pos);
+    float r = sqrt(r2);
+    if (r < 2.0 * M) return vec3(0.0);
+
+    vec3 rHat = pos / r;
+
+    // Угловой момент частицы
+    vec3 L = cross(pos, vel);
+    float L2 = dot(L, L);
+
+    // Schwarzschild 1PN (эффективный потенциал)
+    vec3 acc_schw =
+        -rHat * (M / (r*r)) *
+        (1.0 + 3.0 * L2 / (r*r));
+
+    // Lense–Thirring (Kerr)
+    vec3 J = vec3(0.0, a * M, 0.0);
+    vec3 Bg = (3.0 * dot(J, rHat) * rHat - J) / (r*r*r);
+    vec3 acc_lt = 2.0 * cross(vel, Bg);
+
+    return acc_schw + acc_lt;
+}
+
+vec3 tracePhoton(vec3 camPos, vec3 rayDir) {
+    vec3 pos = camPos;
+    vec3 dir = rayDir;
+
+    for (int i = 0; i < 200; ++i) {
+        float r = length(pos);
+        if (r < 2.0 * M) return vec3(0.0);
+
+        // Schwarzschild bending
+        vec3 acc = -normalize(pos) * (3.0 * M / (r*r*r));
+        dir += acc * 0.02;
+        dir = normalize(dir);
+        pos += dir * 0.02;
+
+        // Пересечение с диском
+        if (abs(pos.y) < 0.02 && r > 6.0*M && r < 50.0*M) {
+            float doppler = dot(dir, normalize(cross(pos, vec3(0,1,0))));
+            return vec3(1.0, 0.4, 0.1) * (1.0 + doppler);
+        }
+    }
+    return vec3(0.0);
+}
+
+
+void main() {
+    uint idx = gl_GlobalInvocationID.x;
+    if (idx >= particles.length()) return;
+
+    // Работаем с vec4, чтобы сохранить компоненту W (яркость)
+    vec4 p = particles[idx].pos;
+    vec3 v = particles[idx].vel.xyz;
+
+    // 1. Интегрирование RK4
+    float sDt = dt / 8.0;
+    vec3 pos3 = p.xyz; // Временная переменная для расчетов
+    float h = dt;
+
+    vec3 k1_v = getAcceleration(pos3, v);
+    vec3 k1_p = v;
+
+    vec3 k2_v = getAcceleration(pos3 + 0.5*h*k1_p, v + 0.5*h*k1_v);
+    vec3 k2_p = v + 0.5*h*k1_v;
+
+    vec3 k3_v = getAcceleration(pos3 + 0.5*h*k2_p, v + 0.5*h*k2_v);
+    vec3 k3_p = v + 0.5*h*k2_v;
+
+    vec3 k4_v = getAcceleration(pos3 + h*k3_p, v + h*k3_v);
+    vec3 k4_p = v + h*k3_v;
+
+    v    += (h/6.0)*(k1_v + 2.0*k2_v + 2.0*k3_v + k4_v);
+    pos3 += (h/6.0)*(k1_p + 2.0*k2_p + 2.0*k3_p + k4_p);
+
+    p.xyz = pos3;
+
+    // 2. Вязкость
+    float r = length(p.xyz);
+    float viscosity = 0.0002 + (0.008 * M) / (r * r);
+    v *= (1.0 - viscosity * dt * 60.0);
+
+    vec3 radialDir = -normalize(p.xyz);
+    vec3 tangentVel = v - dot(v, radialDir) * radialDir; 
+    float momentumLoss = length(tangentVel) * viscosity * 0.5;
+    v += radialDir * momentumLoss * dt * 60.0;
+
+    float isco_radius = 6.0 * M;
+
+    if (r < isco_radius) {
+        float plungeStrength = 0.1 * (isco_radius - r) / M;
+        v += radialDir * plungeStrength * dt * 60.0;
+    }
+
+    // 3. Респаун
+    float r_horizon = M + sqrt(max(0.0, M * M - a * a));
+    
+    if (r < r_horizon * 1.15 || r > 85.0 || isnan(r)) {
+        uint seed = idx ^ uint(p.x * 1000.0) ^ uint(p.z * 1000.0) ^ uint(dt * 10000.0);
+        float h1 = pcg_hash(seed);
+        float h2 = pcg_hash(seed + 1234u);
+        float h3 = pcg_hash(seed + 5678u);
+        
+        float ang;
+        float spawnR;
+        float intensity;
+
+        float minDiskR = 12.0;
+        float maxDiskR = 47.0; 
+
+        if (idx % 60 == 0) {
+            float gold_angle = 2.39996; 
+            ang = float(idx) * gold_angle; 
+            spawnR = minDiskR + h2 * (maxDiskR - minDiskR); 
+            p.y = (h3 - 0.5) * 0.02;
+            intensity = 2.5; // Луч
+        } 
+        else {
+            ang = h1 * 6.283185; 
+            spawnR = minDiskR + sqrt(h2) * (maxDiskR - minDiskR);
+            p.y = (h3 - 0.5) * 0.15;
+            intensity = 1.0; // Газ
+        }
+        
+        p.x = spawnR * cos(ang);
+        p.z = spawnR * sin(ang);
+        p.w = intensity; // Теперь p - это vec4, ошибки не будет
+
+        float vOrb = sqrt(M / spawnR) * (0.98 + h3 * 0.02);
+        v = vec3(-sin(ang), (h1 - 0.5) * 0.01, cos(ang)) * vOrb;
+    }
+
+    // 4. Запись
+    particles[idx].pos = p; // Записываем vec4 целиком (с интенсивностью в W)
+    particles[idx].vel.xyz = v;
+}

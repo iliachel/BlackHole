@@ -4,8 +4,10 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    GLWidget* glWidget = new GLWidget(this);
-    setCentralWidget(glWidget);
+    m_glWidget = new GLWidget(this);
+    setCentralWidget(m_glWidget);
+    resize(1440, 900);
+    setWindowTitle("BlackHole Kerr Geodesics Lab");
 }
 
 MainWindow::~MainWindow() {}
